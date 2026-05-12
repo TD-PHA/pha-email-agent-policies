@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHA Email Agent — Connect QuickBooks Online</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 720px; margin: 4em auto; padding: 0 1.5em; line-height: 1.6; color: #222; }
+  h1 { font-size: 1.6em; margin-bottom: 0.2em; }
+  h2 { font-size: 1.1em; margin-top: 2em; color: #333; }
+  a { color: #0a5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ol { padding-left: 1.4em; }
+  li { margin: 0.6em 0; }
+  code { background: #f4f4f4; padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.9em; }
+  .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 0.8em 1em; margin: 1.5em 0; border-radius: 4px; }
+  nav { margin-bottom: 2em; }
+  footer { margin-top: 4em; padding-top: 1em; border-top: 1px solid #eee; color: #888; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<nav><a href="index.html">&larr; Policies index</a></nav>
+
+<h1>Connect / Reconnect QuickBooks Online</h1>
+
+<div class="note">
+<strong>About this app:</strong> PHA Email Agent is a private internal-use accounting automation tool operated by Prestige Home Automation Ltd. for its own businesses. It is <strong>not</strong> a publicly distributed app and is not available on the Intuit App Marketplace. The OAuth grant flow described below is initiated by the operator on the operator's own machine and authorizes the operator's own QuickBooks Online company.
+</div>
+
+<h2>How the connect flow works</h2>
+<ol>
+  <li>The operator runs the consent script <code>python -m bootstrap_cli.consent_qbo_prod</code> on the operator's local machine.</li>
+  <li>The script opens the operator's default browser to the Intuit OAuth consent page (<code>appcenter.intuit.com</code>).</li>
+  <li>The operator signs in to their Intuit account and selects the QuickBooks Online company to authorize.</li>
+  <li>Intuit redirects to <code>http://localhost:8400/callback</code> where the script captures the authorization code.</li>
+  <li>The script exchanges the code for refresh + access tokens and writes the refresh token, realm ID, client ID, and client secret to Microsoft Azure Key Vault under the operator's Azure subscription.</li>
+  <li>Subsequent automated runs of PHA Email Agent use the refresh token to obtain access tokens as needed; the access token is never stored.</li>
+</ol>
+
+<h2>Reconnect flow</h2>
+<p>If the refresh token is revoked (manually or after 100 days of inactivity per Intuit's rotation policy), the operator simply re-runs <code>python -m bootstrap_cli.consent_qbo_prod</code>. The new refresh token overwrites the previous one in Key Vault atomically.</p>
+
+<h2>Why not a hosted Connect page?</h2>
+<p>PHA Email Agent has no public Connect button because it is not distributed publicly. The OAuth consent flow is initiated only by the operator on their own machine for their own QuickBooks Online companies (currently: Prestige Home Automation Ltd. and Denyer Property Group). No third parties are involved.</p>
+
+<h2>Contact</h2>
+<p>Connection issues or questions: <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a></p>
+
+<footer>&copy; 2026 Prestige Home Automation Ltd. Registered in England and Wales.</footer>
+</body>
+</html>

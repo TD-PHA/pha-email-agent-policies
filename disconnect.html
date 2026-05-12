@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHA Email Agent — Disconnect QuickBooks Online</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 720px; margin: 4em auto; padding: 0 1.5em; line-height: 1.6; color: #222; }
+  h1 { font-size: 1.6em; margin-bottom: 0.2em; }
+  h2 { font-size: 1.1em; margin-top: 2em; color: #333; }
+  a { color: #0a5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ol { padding-left: 1.4em; }
+  li { margin: 0.6em 0; }
+  code { background: #f4f4f4; padding: 0.1em 0.4em; border-radius: 3px; font-size: 0.9em; }
+  .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 0.8em 1em; margin: 1.5em 0; border-radius: 4px; }
+  nav { margin-bottom: 2em; }
+  footer { margin-top: 4em; padding-top: 1em; border-top: 1px solid #eee; color: #888; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<nav><a href="index.html">&larr; Policies index</a></nav>
+
+<h1>Disconnect QuickBooks Online</h1>
+
+<div class="note">
+<strong>About this app:</strong> PHA Email Agent is a private internal-use accounting automation tool operated by Prestige Home Automation Ltd. for its own businesses. It is <strong>not</strong> a publicly distributed app. The disconnect flow described below revokes the OAuth refresh token, which immediately and irreversibly cuts the app's access to the operator's QuickBooks Online company.
+</div>
+
+<h2>How to disconnect</h2>
+<p>Two equivalent ways to revoke PHA Email Agent's access to your QuickBooks Online company:</p>
+
+<h2>Option 1: Via Intuit account dashboard</h2>
+<ol>
+  <li>Sign in to <a href="https://accounts.intuit.com/app/account-manager/security" target="_blank" rel="noopener">accounts.intuit.com</a>.</li>
+  <li>Go to <strong>Security</strong> &rarr; <strong>Connected apps</strong>.</li>
+  <li>Locate <strong>PHA Email Agent Spike</strong> (the registered application name) in the list of authorized apps.</li>
+  <li>Click <strong>Disconnect</strong> or <strong>Revoke access</strong>.</li>
+</ol>
+
+<h2>Option 2: Via QuickBooks Online settings</h2>
+<ol>
+  <li>Sign in to the QuickBooks Online company that authorized the app.</li>
+  <li>Go to <strong>Settings (gear icon)</strong> &rarr; <strong>Manage users</strong> &rarr; <strong>Apps</strong> (or <strong>Apps</strong> &rarr; <strong>My Apps</strong>).</li>
+  <li>Find <strong>PHA Email Agent Spike</strong>.</li>
+  <li>Click <strong>Disconnect</strong>.</li>
+</ol>
+
+<h2>What happens after disconnect</h2>
+<ul>
+  <li>The refresh token held by the operator (in Microsoft Azure Key Vault) becomes invalid immediately on Intuit's side.</li>
+  <li>The next automated run of PHA Email Agent for the disconnected company will fail with an OAuth error; the operator's Azure Monitor alert will fire to the operator's email and the run will be retried only after manual re-consent.</li>
+  <li>No customer-side cleanup is required. PHA Email Agent stores PDF copies of invoices in the operator's own Microsoft OneDrive (not in the disconnected QBO company). PDF copies already attached to QBO records remain attached until the QBO company owner removes them.</li>
+</ul>
+
+<h2>Reconnect</h2>
+<p>If the operator wants to reconnect, they simply re-run the consent script on their local machine (see the <a href="connect.html">Connect page</a>). No customer action is required.</p>
+
+<h2>Contact</h2>
+<p>Disconnection issues or questions: <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a></p>
+
+<footer>&copy; 2026 Prestige Home Automation Ltd. Registered in England and Wales.</footer>
+</body>
+</html>
