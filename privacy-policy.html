@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHA Email Agent — Privacy Policy</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 720px; margin: 4em auto; padding: 0 1.5em; line-height: 1.6; color: #222; }
+  h1 { font-size: 1.6em; margin-bottom: 0.2em; }
+  h2 { font-size: 1.1em; margin-top: 2em; color: #333; }
+  .meta { color: #888; font-size: 0.9em; margin-top: 0.5em; }
+  a { color: #0a5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  p { margin: 0.8em 0; }
+  ul { padding-left: 1.4em; }
+  li { margin: 0.4em 0; }
+  footer { margin-top: 4em; padding-top: 1em; border-top: 1px solid #eee; color: #888; font-size: 0.9em; }
+  nav { margin-bottom: 2em; }
+  strong { color: #000; }
+</style>
+</head>
+<body>
+<nav><a href="index.html">&larr; Policies index</a></nav>
+
+<h1>Privacy Policy</h1>
+<p class="meta">Last updated: 2026-05-12 &middot; Effective date: 2026-05-12</p>
+
+<h2>1. Who We Are</h2>
+<p>"PHA Email Agent" (the "Software") is operated by <strong>Prestige Home Automation Ltd.</strong> ("we", "us", "the Operator"), a company registered in England and Wales. The Software performs internal accounting automation for the Operator and its associated businesses (Prestige Home Automation Ltd. and Denyer Property Group). The Software is <strong>not</strong> a public service, is not offered to third parties, and does not collect data from any external user.</p>
+
+<h2>2. What Data the Software Processes</h2>
+<p>The Software accesses, on behalf of authorized account owners only, the following types of data:</p>
+<ul>
+  <li><strong>Email metadata and attachments</strong> from authorized Microsoft 365 mailboxes (sender address, subject line, attachment file names, attachment binary content for PDF invoices and receipts only).</li>
+  <li><strong>PDF files</strong> uploaded to authorized Microsoft OneDrive accounts under a deterministic folder structure (e.g. <code>Accounts/2026/Supplier/...</code>).</li>
+  <li><strong>Invoice metadata extracted from PDFs</strong> (supplier name, invoice number, invoice date, total amount, line items where structured by the issuer).</li>
+  <li><strong>Posted-record references</strong> from authorized Intuit QuickBooks Online company files (existing Bill / Expense / Purchase / Deposit IDs the Software attaches PDFs to). The Software does not create new QBO records.</li>
+</ul>
+
+<h2>3. Where the Data Lives</h2>
+<p>All processing happens within the Operator's own Microsoft Azure subscription, in the UK South region (<code>uksouth</code>). The Software's only outbound calls are to:</p>
+<ul>
+  <li>Microsoft Graph (graph.microsoft.com) &mdash; for email read and OneDrive upload, on behalf of the authorized account owner.</li>
+  <li>Intuit QuickBooks Online API (intuit.com) &mdash; for read of posted records and PDF attachment upload, on behalf of the authorized QBO administrator.</li>
+  <li>Microsoft Azure platform services (Key Vault, Storage, Application Insights, Monitor) &mdash; under the Operator's Azure subscription.</li>
+</ul>
+<p><strong>No data is shared with any other third party.</strong> No data is sold, traded, advertised on, or transferred outside of these named services.</p>
+
+<h2>4. How Authentication Works</h2>
+<p>The Software uses standard OAuth 2.0 with refresh tokens. Tokens are explicitly granted by the account owner during a one-time browser-based consent flow and are stored in Microsoft Azure Key Vault under the Operator's Azure subscription, accessible only to the Software's Managed Identity. Tokens are <strong>never</strong> logged, copied to local files, or shared.</p>
+
+<h2>5. Data Retention</h2>
+<p>PDF copies in the authorized OneDrive accounts are retained per the account owner's normal file retention. Telemetry in Microsoft Application Insights is retained for 30 days. Refresh tokens are retained for the lifetime of the OAuth grant (until the account owner revokes consent).</p>
+
+<h2>6. Your Rights</h2>
+<p>Authorized account owners can:</p>
+<ul>
+  <li>Revoke the Software's OAuth grant at any time via the Microsoft account dashboard (account.microsoft.com) or the Intuit account dashboard (intuit.com). Revocation is immediate and irrevocable until the account owner re-consents.</li>
+  <li>Request a full list of data the Software has processed by contacting <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a>.</li>
+  <li>Request deletion of all PDF copies and metadata from the Operator's OneDrive and Azure resources by contacting <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a>.</li>
+</ul>
+
+<h2>7. Security</h2>
+<p>The Software follows industry-standard practices: OAuth refresh tokens are stored in Azure Key Vault with role-based access control limited to the Software's Managed Identity; secrets are redacted from telemetry before reaching Application Insights; all transport is over TLS; the Software's source code is version-controlled in a private repository accessible only to authorized personnel.</p>
+
+<h2>8. Changes to This Policy</h2>
+<p>This policy may be updated. The "Last updated" date at the top reflects the most recent revision. Material changes (e.g. additional data categories processed, additional third-party services contacted) will be announced to the authorized account owners by email before taking effect.</p>
+
+<h2>9. Contact</h2>
+<p>Privacy enquiries: <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a></p>
+
+<footer>&copy; 2026 Prestige Home Automation Ltd. Registered in England and Wales.</footer>
+</body>
+</html>
