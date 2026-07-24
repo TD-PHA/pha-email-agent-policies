@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>PHA Email Agent — Connection Callback</title>
+<style>
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center;
+    background: #0f766e; background: linear-gradient(160deg, #0f766e, #134e4a);
+    font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a; padding: 24px;
+  }
+  .card {
+    background: #ffffff; width: 100%; max-width: 560px; border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.25); padding: 32px 30px 28px;
+  }
+  h1 { font-size: 1.35rem; margin: 0 0 6px; }
+  .sub { color: #475569; margin: 0 0 22px; font-size: .96rem; line-height: 1.5; }
+  .ok { color: #0f766e; font-weight: 700; }
+  label { display: block; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: #64748b; font-weight: 700; margin: 0 0 6px; }
+  .blob {
+    width: 100%; font-family: "Cascadia Code", ui-monospace, Consolas, monospace;
+    font-size: .9rem; padding: 13px 14px; border: 2px solid #0f766e; border-radius: 10px;
+    background: #f0fdfa; color: #0f172a; word-break: break-all; resize: none; line-height: 1.5;
+  }
+  button {
+    margin-top: 14px; width: 100%; padding: 13px; font-size: 1rem; font-weight: 700;
+    color: #fff; background: #0f766e; border: 0; border-radius: 10px; cursor: pointer;
+  }
+  button:hover { background: #115e57; }
+  button.done { background: #16a34a; }
+  .steps { margin: 22px 0 0; padding: 16px 18px; background: #f8fafc; border-radius: 10px; font-size: .9rem; color: #334155; line-height: 1.6; }
+  .steps b { color: #0f172a; }
+  .err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 14px 16px; border-radius: 10px; font-size: .92rem; }
+  @media (prefers-color-scheme: dark) {
+    .card { background: #1e293b; color: #e2e8f0; }
+    .sub { color: #94a3b8; }
+    .blob { background: #0b1220; color: #e2e8f0; border-color: #2dd4bf; }
+    .steps { background: #0f172a; color: #cbd5e1; }
+    .steps b { color: #f1f5f9; }
+  }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <h1>Loading…</h1>
+  </div>
+<script>
+  (function () {
+    var card = document.getElementById("card");
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get("code");
+    var realmId = params.get("realmId");
+    var state = params.get("state");
+    var error = params.get("error");
+
+    if (error) {
+      card.innerHTML =
+        '<h1>Connection was cancelled</h1>' +
+        '<div class="err">Intuit returned: <b>' + escapeHtml(error) + '</b>' +
+        (params.get("error_description") ? ' — ' + escapeHtml(params.get("error_description")) : '') +
+        '</div><div class="steps">Just tell your assistant it was cancelled and they will reopen the link.</div>';
+      return;
+    }
+    if (!code || !realmId) {
+      card.innerHTML =
+        '<h1>Waiting for QuickBooks…</h1>' +
+        '<p class="sub">This page shows your connection code after you approve access on the Intuit screen. ' +
+        'If you have not approved yet, use the link from your assistant first.</p>';
+      return;
+    }
+
+    var blob = "code=" + code + "&realmId=" + realmId + (state ? "&state=" + state : "");
+    card.innerHTML =
+      '<h1><span class="ok">✓ Approved.</span> One last step.</h1>' +
+      '<p class="sub">Copy the code below and paste it back to your assistant to finish connecting QuickBooks. ' +
+      'This code is safe to share with your assistant and expires within a few minutes.</p>' +
+      '<label for="blob">Your connection code</label>' +
+      '<textarea id="blob" class="blob" rows="3" readonly></textarea>' +
+      '<button id="copy" type="button">Copy code</button>' +
+      '<div class="steps"><b>Then:</b> switch back to your assistant and paste it. You can close this tab afterwards.</div>';
+
+    var ta = document.getElementById("blob");
+    ta.value = blob;
+    var btn = document.getElementById("copy");
+    btn.addEventListener("click", function () {
+      ta.select();
+      navigator.clipboard.writeText(blob).then(function () {
+        btn.textContent = "Copied ✓"; btn.classList.add("done");
+        setTimeout(function () { btn.textContent = "Copy code"; btn.classList.remove("done"); }, 2000);
+      }).catch(function () {
+        document.execCommand("copy");
+        btn.textContent = "Copied ✓"; btn.classList.add("done");
+      });
+    });
+
+    function escapeHtml(s) { return String(s).replace(/[&<>"']/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  })();
+</script>
+</body>
+</html>
