@@ -10,4 +10,6 @@ Hosted via GitHub Pages. URLs:
 
 These URLs are referenced from Intuit Developer (production app review form) and the Microsoft Entra app registration consent screen.
 
+Also hosts the **PHA Time Tracker** pages (Intuit app "PHA Time Tracker"), same host and path: `time-tracker-eula.html`, `time-tracker-privacy-policy.html`, `time-tracker-connect.html`, `time-tracker-disconnect.html`.
+
 Contact: accounts@pha.ltd

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PHA Time Tracker — Privacy Policy</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; max-width: 720px; margin: 4em auto; padding: 0 1.5em; line-height: 1.6; color: #222; }
+  h1 { font-size: 1.6em; margin-bottom: 0.2em; }
+  h2 { font-size: 1.1em; margin-top: 2em; color: #333; }
+  .meta { color: #888; font-size: 0.9em; margin-top: 0.5em; }
+  a { color: #0a5; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  p { margin: 0.8em 0; }
+  ul { padding-left: 1.4em; }
+  li { margin: 0.4em 0; }
+  footer { margin-top: 4em; padding-top: 1em; border-top: 1px solid #eee; color: #888; font-size: 0.9em; }
+  nav { margin-bottom: 2em; }
+  strong { color: #000; }
+</style>
+</head>
+<body>
+<nav><a href="index.html">&larr; Policies index</a></nav>
+
+<h1>Privacy Policy</h1>
+<p class="meta">PHA Time Tracker &middot; Last updated: 2026-10-15 &middot; Effective date: 2026-10-15</p>
+
+<h2>1. Who We Are</h2>
+<p>"PHA Time Tracker" (the "Software") is operated by <strong>Prestige Home Automation Ltd.</strong> ("we", "us", "the Operator"), a company registered in England and Wales. The Software schedules work, records time and mileage, and reports what jobs cost for the Operator's own business. It is <strong>not</strong> a public service, is not offered to third parties, and does not collect data from any external user. Its connection to Intuit QuickBooks Online is used only by the Operator's two directors, for the Operator's own QuickBooks Online company.</p>
+
+<h2>2. What the Software Does with QuickBooks Online</h2>
+<p>The Software requests one OAuth scope, <code>com.intuit.quickbooks.accounting</code>, and uses it as follows.</p>
+<p><strong>It writes:</strong></p>
+<ul>
+  <li><strong>Bills</strong> for approved business mileage, one per person per send, with a line per journey.</li>
+  <li><strong>Supplier credits</strong> (VendorCredit) where an approved correction reduces mileage that has already been sent.</li>
+</ul>
+<p>Each line describes one journey: its date, the job name, the site postcode, whether it was one way or a return, the miles, the mileage rate and the stated purpose. No home address is sent.</p>
+<p><strong>It reads:</strong></p>
+<ul>
+  <li>Expense accounts, so a director can choose which account mileage is posted to.</li>
+  <li>VAT (tax) codes, so a director can choose the code applied to mileage lines.</li>
+  <li>Suppliers (vendors), so a director can choose the supplier each person's mileage is billed under.</li>
+  <li>Company information (the company name), so the director can confirm the right company was connected.</li>
+  <li>Bills and supplier credits, looked up by their document number only, so the same mileage is never entered twice.</li>
+</ul>
+<p>The Software does <strong>not</strong> read customers, invoices, bank accounts, payroll, reports or any other QuickBooks data, and it does not use any QuickBooks mileage API. Mileage trip files, where used, are downloaded by a director and imported by that director through QuickBooks Online's own screens; the Software takes no part in that import.</p>
+
+<h2>3. Where the Data Lives</h2>
+<p>The Software's data, including its record of what has been sent to QuickBooks Online, is held in the Operator's own Supabase database. The Software's only calls to Intuit are made from server-side functions on that system, never from a user's browser, and go to:</p>
+<ul>
+  <li>Intuit OAuth services (appcenter.intuit.com, oauth.platform.intuit.com, developer.api.intuit.com) &mdash; to connect, refresh and revoke access, on behalf of the director who connected.</li>
+  <li>Intuit QuickBooks Online API (quickbooks.api.intuit.com) &mdash; for the reads and writes listed in section 2.</li>
+</ul>
+<p><strong>No data is shared with any other third party.</strong> No data is sold, traded, advertised on, or transferred outside of these named services.</p>
+
+<h2>4. How Authentication Works</h2>
+<p>The Software uses standard OAuth 2.0. A director grants access in Intuit's own sign-in and consent pages; the Software never sees or stores the director's Intuit password. The resulting refresh token is stored <strong>encrypted in Supabase Vault</strong>, server-side, readable only by the Software's server functions. It is <strong>never</strong> sent to or stored in the browser, logged, or shared. Access tokens are short-lived and are not kept. A weekly scheduled task refreshes the token so that the connection does not lapse through inactivity.</p>
+
+<h2>5. Data Retention</h2>
+<p>The refresh token is kept for as long as the connection exists. When a director presses <strong>Disconnect</strong> in the Software, the Software revokes the grant at Intuit and deletes the stored token. The Software keeps its own record of what it has sent to QuickBooks Online (which mileage, in which Bill or supplier credit, and when), because that record is part of the Operator's accounting history. Records written into QuickBooks Online remain in the Operator's QuickBooks company under the Operator's normal retention.</p>
+
+<h2>6. Your Rights</h2>
+<p>The Operator's directors, as the owners of the QuickBooks Online company, can:</p>
+<ul>
+  <li>Disconnect the Software at any time from within the Software (Settings &gt; QuickBooks), or from QuickBooks Online or the Intuit account dashboard, as described on the <a href="time-tracker-disconnect.html">Disconnect page</a>.</li>
+  <li>Request a list of the data the Software has sent to QuickBooks Online by contacting <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a>.</li>
+</ul>
+<p>Employees of the Operator whose approved mileage is sent to QuickBooks Online may ask what has been sent about them by contacting <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a>.</p>
+
+<h2>7. Security</h2>
+<p>The refresh token is encrypted at rest in Supabase Vault and is handled only by server-side functions; the client secret is held only in the server's configuration. Access to the QuickBooks connection is restricted to the Operator's directors by the database's row-level security, and every send is recorded so it cannot be repeated by accident. All transport is over TLS. The Software's source code is version-controlled in a private repository accessible only to authorised personnel.</p>
+
+<h2>8. Changes to This Policy</h2>
+<p>This policy may be updated. The "Last updated" date at the top reflects the most recent revision. Material changes (for example, an additional kind of QuickBooks data read or written) will be made known to the Operator's directors before taking effect.</p>
+
+<h2>9. Contact</h2>
+<p>Privacy enquiries: <a href="mailto:accounts@pha.ltd">accounts@pha.ltd</a></p>
+
+<footer>&copy; 2026 Prestige Home Automation Ltd. Registered in England and Wales.</footer>
+</body>
+</html>
